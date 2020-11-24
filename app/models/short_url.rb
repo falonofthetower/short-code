@@ -3,7 +3,7 @@ class ShortUrl < ApplicationRecord
   CHARACTERS = [*'0'..'9', *'a'..'z', *'A'..'Z'].freeze
   PUBLIC_ATTRIBUTES = [:full_url, :title]
 
-  validate :validate_full_url
+  validates :full_url, valid_url: true
 
   def short_code
   end
@@ -15,11 +15,6 @@ class ShortUrl < ApplicationRecord
   end
 
   def update_title!
-  end
-
-  private
-
-  def validate_full_url
   end
 
 end
