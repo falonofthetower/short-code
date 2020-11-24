@@ -28,6 +28,7 @@ class ShortUrl < ApplicationRecord
   end
 
   def update_title!
+    update(title: URI.parse(full_url).open.read.match(%r{<title>(.*?)</title>})[1])
   end
 
   private
