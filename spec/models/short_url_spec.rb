@@ -73,6 +73,20 @@ RSpec.describe ShortUrl, type: :model do
         expect(short_url.short_code).to eq("O")
       end
     end
+  end
+
+  describe '#most_frequent' do
+    let(:short_urls) do
+      [
+        ShortUrl.create!(click_count: 1, full_url: 'http://beenverified.com'),
+        ShortUrl.create!(click_count: 2, full_url: 'http://beenverified.com'),
+        ShortUrl.create!(click_count: 3, full_url: 'http://beenverified.com')
+      ]
+    end
+
+    it "returns the url's ordered by most clicked first" do
+      expect(ShortUrl.all.most_frequent).to eq(short_urls.reverse)
+    end
 
   end
 

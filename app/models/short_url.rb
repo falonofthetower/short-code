@@ -6,6 +6,8 @@ class ShortUrl < ApplicationRecord
 
   validates :full_url, valid_url: true
 
+  scope :most_frequent, -> { reorder(click_count: :desc) }
+
   def self.find_by_short_code(code)
     ShortUrl.find_by(id: decode(code))
   end

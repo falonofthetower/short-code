@@ -5,7 +5,7 @@ class ShortUrlsController < ApplicationController
 
   def index
     render status: 200, json: {
-      urls: ShortUrl.all.limit(100).as_json(
+      urls: ShortUrl.most_frequent.limit(100).as_json(
         only: [*ShortUrl::PUBLIC_ATTRIBUTES])
     }
   end
