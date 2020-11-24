@@ -4,7 +4,10 @@ class ShortUrlsController < ApplicationController
   skip_before_action :verify_authenticity_token
 
   def index
-    render status: 200, json: {}
+    render status: 200, json: {
+      urls: ShortUrl.all.limit(100).as_json(
+        only: [*ShortUrl::PUBLIC_ATTRIBUTES])
+    }
   end
 
   def create

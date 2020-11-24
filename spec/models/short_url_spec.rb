@@ -52,6 +52,12 @@ RSpec.describe ShortUrl, type: :model do
       expect(short_url.title).to eq("Frequently Asked Questions | BeenVerified")
     end
 
+    it "returns a set of public_attributes" do
+      expect(short_url.public_attributes).to eq({
+        "full_url" => short_url.full_url, "title" => short_url.title
+      })
+    end
+
     context "with a higher id" do
 
       # Instead of creating a bunch of ShortUrls to get a higher
