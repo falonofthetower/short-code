@@ -10,6 +10,12 @@ class ShortUrl < ApplicationRecord
     ShortUrl.find_by(id: decode(code))
   end
 
+  def click!
+    with_lock do
+      increment!(:click_count)
+    end
+  end
+
   def short_code
     return nil unless full_url
     encode(id)

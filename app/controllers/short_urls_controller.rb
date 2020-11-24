@@ -24,6 +24,7 @@ class ShortUrlsController < ApplicationController
     set_short_url
 
     if @short_url
+      @short_url.click!
       redirect_to @short_url.full_url
     else
       render status: 404, json: {}
