@@ -21,9 +21,20 @@ class ShortUrlsController < ApplicationController
   end
 
   def show
+    set_short_url
+
+    if @short_url
+      redirect_to @short_url.full_url
+    else
+      render status: 404, json: {}
+    end
   end
 
   private
+
+  def set_short_url
+    @short_url = ShortUrl.find_by_short_code(params[:id])
+  end
 
   def short_url_params
     params.permit(:full_url)

@@ -6,6 +6,10 @@ class ShortUrl < ApplicationRecord
 
   validates :full_url, valid_url: true
 
+  def self.find_by_short_code(code)
+    ShortUrl.find_by(id: decode(code))
+  end
+
   def short_code
     return nil unless full_url
     encode(id)
@@ -22,7 +26,7 @@ class ShortUrl < ApplicationRecord
 
   private
 
-    def encode(id)
+  def encode(id)
     i = id
 
     String.new('').tap do |code|
@@ -31,6 +35,12 @@ class ShortUrl < ApplicationRecord
         i /= BASE
       end
     end.reverse
+  end
+
+  def self.decode(code)
+    i = 0
+    code.each_char { |c| i = i * BASE + CHARACTERS.index(c) }
+    i
   end
 
 end
