@@ -14,6 +14,7 @@ class ShortUrlsController < ApplicationController
     @short_url = ShortUrl.new(short_url_params)
 
     if @short_url.save
+      UpdateTitleJob.perform_later(@short_url.id)
       render status: 200, json: { short_code: @short_url.short_code }
     else
       render status: 422, json: { errors: helpers.humanize_errors(@short_url) }
