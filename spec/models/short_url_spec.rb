@@ -52,6 +52,12 @@ RSpec.describe ShortUrl, type: :model do
       expect(short_url.title).to eq("Frequently Asked Questions | BeenVerified")
     end
 
+    it "returns a set of public_attributes" do
+      expect(short_url.public_attributes).to eq({
+        "full_url" => short_url.full_url, "title" => short_url.title
+      })
+    end
+
     context "with a higher id" do
 
       # Instead of creating a bunch of ShortUrls to get a higher
@@ -66,6 +72,20 @@ RSpec.describe ShortUrl, type: :model do
         short_url.update_column(:id, 50)
         expect(short_url.short_code).to eq("O")
       end
+    end
+  end
+
+  describe '#most_frequent' do
+    let(:short_urls) do
+      [
+        ShortUrl.create!(click_count: 1, full_url: 'http://beenverified.com'),
+        ShortUrl.create!(click_count: 2, full_url: 'http://beenverified.com'),
+        ShortUrl.create!(click_count: 3, full_url: 'http://beenverified.com')
+      ]
+    end
+
+    it "returns the url's ordered by most clicked first" do
+      expect(ShortUrl.all.most_frequent).to eq(short_urls.reverse)
     end
 
   end

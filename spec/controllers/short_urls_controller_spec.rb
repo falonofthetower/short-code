@@ -33,6 +33,11 @@ RSpec.describe ShortUrlsController, type: :controller do
       expect(parsed_response['errors']).to be_include("Full url is not a valid url")
     end
 
+    it "kicks off the job to set the title" do
+      expect(UpdateTitleJob).to receive(:perform_later)
+      post :create, params: { full_url: "https://www.test.rspec" }, format: :json
+    end
+
   end
 
   describe "show" do
