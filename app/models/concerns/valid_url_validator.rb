@@ -1,5 +1,5 @@
 class ValidUrlValidator < ActiveModel::EachValidator
-  def validate_each(record, attribute, value)
+  def validate_each(record, attribute, _value)
     url = record.send(attribute)
     record.errors.add(attribute, "can't be blank") and return false if url.blank?
 

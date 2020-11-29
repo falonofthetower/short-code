@@ -1,18 +1,16 @@
 class ShortUrl < ApplicationRecord
 
-  CHARACTERS = [*'0'..'9', *'a'..'z', *'A'..'Z'].freeze
   PUBLIC_ATTRIBUTES = [:full_url, :title]
-  BASE = CHARACTERS.size
 
   validates :full_url, valid_url: true
 
   scope :most_frequent, -> { reorder(click_count: :desc) }
 
   def self.find_by_short_code(code)
-    ShortUrl.find_by(id: decode(code))
+    ShortUrl.find_by_id(Bijective.decode(code))
   end
 
-  def click!
+  def click
     with_lock do
       increment!(:click_count)
     end
@@ -20,7 +18,7 @@ class ShortUrl < ApplicationRecord
 
   def short_code
     return nil unless full_url
-    encode(id)
+    Bijective.encode(id)
   end
 
   def public_attributes
@@ -31,25 +29,6 @@ class ShortUrl < ApplicationRecord
 
   def update_title!
     update(title: URI.parse(full_url).open.read.match(%r{<title>(.*?)</title>})[1])
-  end
-
-  private
-
-  def encode(id)
-    i = id
-
-    String.new('').tap do |code|
-      while i.positive?
-        code << CHARACTERS[i % BASE]
-        i /= BASE
-      end
-    end.reverse
-  end
-
-  def self.decode(code)
-    i = 0
-    code.each_char { |c| i = i * BASE + CHARACTERS.index(c) }
-    i
   end
 
 end
