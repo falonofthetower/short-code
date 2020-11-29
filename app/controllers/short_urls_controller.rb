@@ -39,7 +39,7 @@ class ShortUrlsController < ApplicationController
   end
 
   def short_url_params
-    params.permit(:full_url)
+    params.except(:format).permit(:full_url)
   end
 
 end
